@@ -8,7 +8,6 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(cors());
 // Servir les fichiers statiques du dossier "uploads"
@@ -25,7 +24,7 @@ mongoose
     .then(() => console.log('MongoDB connecté'))
     .catch((err) => console.error('Erreur de connexion à MongoDB:', err));
 
-// Import des routes
+
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const chatbotRoutes = require('./routes/chatbotRoutes');

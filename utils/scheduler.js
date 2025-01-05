@@ -1,8 +1,7 @@
 const schedule = require('node-schedule');
 const Task = require('../models/Task');
-const sendBrevoEmail = require('./brevo'); // Importer la fonction d'envoi d'email
+const sendBrevoEmail = require('./brevo');
 
-// Fonction pour planifier les rappels
 const scheduleReminders = () => {
     // Planifier une tâche tous les jours à minuit
     schedule.scheduleJob('0 0 * * *', async () => {

@@ -179,30 +179,33 @@ const interactWithChatbot = async (req, res) => {
             // Récupérer les tâches de l'utilisateur
             const tasks = await Task.find({ userId });
 
-            // Identifier les tâches avec des priorités par défaut
+            // Filtrer les tâches par priorité
             const mediumPriorityTasks = tasks.filter(task => task.priority === "Medium");
 
-            // Identifier les tâches avec des échéances proches (dans 2 jours)
+            // Filtrer les tâches dont la date d'échéance est proche (dans 2 jours)
             const upcomingTasks = tasks.filter(task => {
                 const diffInDays = (new Date(task.dueDate) - now) / (1000 * 60 * 60 * 24);
                 return diffInDays <= 2 && diffInDays >= 0 && task.status !== "Completed";
             });
 
-            // Identifier les tâches en retard
+            // Filtrer les tâches en retard
             const overdueTasks = tasks.filter(task => new Date(task.dueDate) < now && task.status !== "Completed");
 
-            // Construire la réponse
+            // Construction de la réponse
             let suggestions = [];
 
+            // Suggestion pour les tâches avec une priorité Medium
             if (mediumPriorityTasks.length > 0) {
                 suggestions.push(`Vous avez ${mediumPriorityTasks.length} tâches avec une priorité 'Medium'. Voulez-vous les reclasser ?`);
             }
 
+            // Suggestion pour les tâches à échéance proche
             if (upcomingTasks.length > 0) {
                 const upcomingTitles = upcomingTasks.map(task => task.title).join(', ');
                 suggestions.push(`Les tâches suivantes sont dues bientôt : ${upcomingTitles}. Pensez à les prioriser.`);
             }
 
+            // Suggestion pour les tâches en retard
             if (overdueTasks.length > 0) {
                 const overdueTitles = overdueTasks.map(task => task.title).join(', ');
                 suggestions.push(`Les tâches suivantes sont en retard : ${overdueTitles}. Voulez-vous les reprogrammer ?`);
@@ -213,9 +216,9 @@ const interactWithChatbot = async (req, res) => {
                 return res.status(200).json({ botResponse: "Aucune suggestion pour le moment." });
             }
 
+            // Retourner les suggestions
             return res.status(200).json({ botResponse: suggestions.join(' ') });
         }
-
 
         // Si aucune commande spécifique n'est reconnue, retourne la réponse générée par Gemini
         return res.status(200).json({ botResponse });
