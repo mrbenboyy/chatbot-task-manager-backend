@@ -116,12 +116,14 @@ const updateUserProfile = async (req, res) => {
             id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
+            password: updatedUser.password,
             profileImage: updatedUser.profileImage, // Retourner la nouvelle image
         });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la mise à jour des informations utilisateur." });
     }
 };
+
 
 
 
