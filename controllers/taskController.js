@@ -24,11 +24,12 @@ const getTaskById = async (req, res) => {
 
 const createTask = async (req, res) => {
     const { title, description, dueDate, priority, status } = req.body;
+    const currentDueDate = dueDate ? new Date(dueDate) : new Date();
     try {
         const task = await Task.create({
             title,
             description,
-            dueDate,
+            dueDate: currentDueDate,
             priority,
             status,
             userId: req.user.id,
